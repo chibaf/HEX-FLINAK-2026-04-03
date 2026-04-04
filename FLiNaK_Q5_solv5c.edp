@@ -162,8 +162,8 @@ for (real t=0; t<T; t+=dt){
     if (n%20 == 0) {
         Vh vel = sqrt(u*u + v*v);
         Vh TempC = r - kelvin;  //表示は摂氏で
-        //plot([u,v], value=true, fill=true, coef=0.01,cmm="Temp [C] at t="+t+"s");
-        plot(TempC, value=true, fill=true, cmm="Temp [C] at t="+t+"s");
+        plot([u,v], value=true, fill=true, coef=0.01,cmm="Temp [C] at t="+t+"s");
+        //plot(TempC, value=true, fill=true, cmm="Temp [C] at t="+t+"s");
     }
     n++;
 }
