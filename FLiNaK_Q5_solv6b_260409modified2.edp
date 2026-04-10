@@ -139,6 +139,7 @@ for (real t=0; t<T; t+=dt){
     }
 }
 
+
 //     --- 熱伝導・移流方程式 (実単位系) ---
     // alpha = kappa / rhoCp //を直接代入
     solve thermal(r, rr, solver=Crout, init=n) =
@@ -161,9 +162,8 @@ for (real t=0; t<T; t+=dt){
         //plot([u,v], value=true, fill=true, coef=0.01,cmm="Temp [C] at t="+t+"s");
         plot(TempC, fill=true, value=true, nbiso=30, 
              cmm="Temp [C] (Time = "+t+"s, Shroud: K=0.5, Cp=2.5k)", wait=false, WindowIndex=0);
-        plot([u,v], value=true, fill=true, coef=0.01,cmm="Temp [C] at t="+t+"s", wait=false, WindowIndex=1);
-//        plot([u, v], value=true, coef=0.1, 
-//             cmm="Velocity [m/s] (Time = "+t+"s)", wait=false, WindowIndex=1);
+        plot([u, v], value=true, coef=0.1, 
+             cmm="Velocity [m/s] (Time = "+t+"s)", wait=false, WindowIndex=1);
     }
     n++;
 }
