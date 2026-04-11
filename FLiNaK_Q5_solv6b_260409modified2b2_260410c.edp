@@ -104,7 +104,7 @@ Ph fP = ( (x >= rpipe && x < d) && (y >= S && y <= S+S*0.1) ) ? Vpump : 0.0;
 
 // --- 6. 時間積分パラメータ ---
 real T = 1000.0;               //総計算時間
-real dt = 2.0;               //時間刻み
+real dt = 0.1;               //時間刻み
 int n = 0;
 
 Qh r = Tref, rr, rp;         //温度場
@@ -177,7 +177,7 @@ for (real t=0; t<T; t+=dt){
 //             cmm="Temp [C] (Time = "+t+"s, Shroud: K=0.5, Cp=2.5k)", wait=false, WindowIndex=0);
         plot(TempC, value=true, viso=levels, 
             cmm="Temp [C] (Time = "+t+"s, Shroud: K=0.5, Cp=2.5k)", wait=false, WindowIndex=0);
-        plot([u,v], value=true, fill=true, coef=0.01,cmm="Temp [C] at t="+t+"s", wait=false, WindowIndex=1);
+        plot([u,v], value=true, fill=true, coef=0.005,cmm="Temp [C] at t="+t+"s", wait=false, WindowIndex=1);
     }
     n++;
 }
