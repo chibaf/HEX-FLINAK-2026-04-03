@@ -1,0 +1,76 @@
+// ==========================================
+// (heat_only_sn1blk4_260214.edp)
+// Axisymmetric Heat
+// Center Axis (x=0) as Insulated (Neumann)
+// Updated: Mild Aspect Ratio & Half Mesh Density & B/W plot
+// ==========================================
+
+// --- 1. Parameters ---
+real w = 0.25;
+real H = 0.8;
+real S = 0.1;
+real H1 = 0.6;
+real d = 0.12;
+real w1 = 0.03; // 幅が0.1に変更されたため、アスペクト比が改善されます
+
+// --- 2. Boundary Definition ---
+border C1(t=0, w){x=t; y=0; label=1;}
+border C2(t=0, H){x=w; y=t; label=1;}
+border C3(t=w, 0){x=t; y=H; label=1;}
+border C4(t=H, 0){x=0; y=t; label=3;} // Center axis
+
+border D1(t=d, d+w1){x=t; y=S; label=2;}
+border D2(t=S, S+H1){x=d+w1; y=t; label=2;}
+border D3(t=d+w1, d){x=t; y=S+H1; label=2;}
+border D4(t=S+H1, S){x=d; y=t; label=2;}
+
+// --- 3. Build Mesh (Balanced Division) ---
+// 分割数を前回の約半分に設定し、計算負荷を軽減しました。
+// 外枠(C)と内部構造体(D)の接続性を考慮したバランスです。
+
+mesh Th = buildmesh(C1(10) + C2(40) + C3(10) + C4(20) + D1(10) + D2(40) + D3(10) + D4(20));
+
+// --- 4. Plot (Black and White) ---
+// bw=1 で白黒表示、wait=1 でキー入力待ちになります。
+plot(Th, wait=1, bw=1);
+
+//end(0);
+
+// --- obs heat and flow parameters
+real Q0 = 500.0;
+real kfluid = 0.6;
+real kins = 0.06;
+
+real g = 9.8;
+real beta = 0.01;
+real Tref = 70.0;
+
+
+// --- 4. FE Spaces ---
+fespace Vh(Th, P1);
+fespace Ph(Th, P0);
+Vh u, v, forceX, forceY;
+Ph kappa, fQ;
+
+// --- 5. Physical Properties ---
+kappa = ( (x >= d && x <= d+w1) && (y >= S && y <= S+H1) ) ? kins : kfluid;
+fQ = ( (x >= 0 && x < d) && (y >= S && y <= S+H1) ) ? Q0 : 0.0;
+
+// --- 6. Solve Temperature ---
+solve steadyHeat(u,v)
+=int2d(Th)(
+x * kappa * (dx(u)*dx(v) + dy(u)*dy(v))
+)
+-int2d(Th)(
+x * fQ * v
+)
++ on(1, u=Tref); // ONLY outer boundaries are 70C. Center is free.
+
+// --- 7. Buoyancy Force ---
+forceX = 0;
+forceY = beta * g * (u - Tref);
+
+// --- 8. Plotting ---
+// Temperature in colors, Buoyancy as vectors.
+// Check if vectors at x=0 are long and upward.
+plot(u, fill=0, boundary=1, value=1, wait=1);
