@@ -107,7 +107,7 @@ int n = 0;
 Qh r = Tref, rr, rp;         //温度場
 
 // --- 7. メインループ ---
-for (real t=0; t<T; t+=dt){
+//for (real t=0; t<T; t+=dt){
 //	u=u*field;v=v*field;
     up = u; vp = v; rp = r;
 //
@@ -140,8 +140,8 @@ for (real t=0; t<T; t+=dt){
   + on(1,2,3,30, r=Tref); // ONLY outer boundaries are 70C. Center is free.
 
 //     --- 可視化 ---
-    if (n%20 == 0) {
-        Vh vel = sqrt(u*u + v*v);
+//    if (n%20 == 0) {
+//        Vh vel = sqrt(u*u + v*v);
         Vh TempC = r - kelvin;  //表示は摂氏で
         //plot([u,v], value=true, fill=true, coef=0.01,cmm="Temp [C] at t="+t+"s");
 //        plot(TempC, fill=true, value=true, nbiso=30, 
@@ -150,6 +150,6 @@ for (real t=0; t<T; t+=dt){
 //        plot([u, v], value=true, coef=0.1, 
    plot(TempC, fill=0,  value=1, nbiso=30,wait=0);
  //            cmm="Velocity [m/s] (Time = "+t+"s)", wait=false, WindowIndex=1);
-    }
-    n++;
-}
+//    }
+//    n++;
+//}
